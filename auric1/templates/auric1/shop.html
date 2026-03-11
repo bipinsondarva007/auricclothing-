@@ -1,0 +1,116 @@
+{% extends 'auric1/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ================= PROMO IMAGE ================= -->
+
+<div class="promo-image-container">
+    <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04"
+         alt="Promotion"
+         class="promo-image">
+</div>
+
+
+<!-- ================= PAGE HEADER ================= -->
+
+<section class="shop-header py-4">
+    <div class="container text-center">
+        <h1 class="display-5 fw-bold">Our Collection</h1>
+        <p class="lead text-muted">Timeless pieces for the modern wardrobe</p>
+    </div>
+</section>
+
+
+<!-- ================= FILTER BUTTONS ================= -->
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+
+        <a href="{% url 'shop' %}?category=all"
+           class="btn {% if current_category == 'all' or not current_category %}btn-dark{% else %}btn-outline-dark{% endif %}">
+           All
+        </a>
+
+        <a href="{% url 'shop' %}?category=men"
+           class="btn {% if current_category == 'men' %}btn-dark{% else %}btn-outline-dark{% endif %}">
+           Men
+        </a>
+
+        <a href="{% url 'shop' %}?category=women"
+           class="btn {% if current_category == 'women' %}btn-dark{% else %}btn-outline-dark{% endif %}">
+           Women
+        </a>
+
+    </div>
+</div>
+
+
+<!-- ================= PRODUCT GRID ================= -->
+
+<div class="container py-4">
+    <div class="row g-4">
+
+        {% for product in products %}
+
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card product-card h-100 border-0">
+
+                <!-- Product Image -->
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
+                    <div class="product-img">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    </div>
+                </a>
+
+                <div class="card-body text-center">
+
+                    <!-- Product Name -->
+                    <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                    </a>
+
+                    <!-- Product Price -->
+                    <p class="card-text fw-bold">₹{{ product.price }}</p>
+
+
+                    <!-- Buttons -->
+                    <div class="d-flex gap-2 justify-content-center">
+
+                        <!-- Add to Cart -->
+                        <form method="post" action="{% url 'add_to_cart' product.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-outline-dark btn-sm">
+                                Add to Cart
+                            </button>
+                        </form>
+
+                        <!-- Buy Now -->
+                        <form method="post" action="{% url 'buy_now' product.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-gold btn-sm">
+                                Buy Now
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+            <p class="text-center">No products found.</p>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% include 'auric1/footer.html' %}
+
+{% endblock %}

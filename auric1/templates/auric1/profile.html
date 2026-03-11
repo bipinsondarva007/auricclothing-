@@ -1,0 +1,108 @@
+{% extends 'auric1/base.html' %}
+{% load static %}
+{% block content %}
+  <div class="container py-5">
+    <div class="profile-box">
+      <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+          <div class="list-group shadow-sm">
+            <a href="#order-history" class="list-group-item list-group-item-action active" data-bs-toggle="list"><i class="bi bi-bag"></i> Order History</a>
+            <a href="#account-details" class="list-group-item list-group-item-action" data-bs-toggle="list"><i class="bi bi-person"></i> Account Details</a>
+            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger"><i class="bi bi-box-arrow-right"></i> Logout</a>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+          <div class="tab-content">
+            <!-- ORDER HISTORY -->
+            <div class="tab-pane fade show active" id="order-history">
+              <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                  <h5 class="mb-0">Order History</h5>
+                </div>
+                <div class="card-body">
+                  {% if orders %}
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Order #</th>
+                            <th>Date</th>
+                            <th>Delivery Date</th> <!-- new column -->
+                            <th>Total</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th>Details</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for order in orders %}
+                            <tr>
+                              <td>#{{ order.id }}</td>
+                              <td>{{ order.created_at|date:'M d, Y' }}</td>
+                              <td>{{ order.estimated_delivery_date|date:'M d, Y' }}</td> <!-- new cell -->
+                              <td>₹{{ order.total_amount }}</td>
+                              <td>{{ order.payment_method }}</td>
+                              <td>
+                                {% if order.payment_status == 'paid' %}
+                                  <span class="badge bg-success">Paid</span>
+                                {% else %}
+                                  <span class="badge bg-warning text-dark">Pending</span>
+                                {% endif %}
+                              </td>
+                              <td>
+                                <a href="{% url 'order_confirmation' order.id %}" class="btn btn-sm btn-outline-dark">View</a>
+                              </td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  {% else %}
+                    <p class="text-center">You haven't placed any orders yet.</p>
+                    <div class="text-center">
+                      <a href="{% url 'shop' %}" class="btn btn-dark">Start Shopping</a>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <!-- ACCOUNT DETAILS -->
+            <div class="tab-pane fade" id="account-details">
+              <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                  <h5 class="mb-0">Account Details</h5>
+                </div>
+                <div class="card-body">
+                  <div class="text-center mb-4">
+                    <i class="bi bi-person-circle profile-avatar" style="font-size: 5rem;"></i>
+                  </div>
+
+                  <p>
+                    <strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}
+                  </p>
+                  <p>
+                    <strong>Username:</strong> {{ user.username }}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {{ user.email }}
+                  </p>
+                  <p>
+                    <strong>Member Since:</strong> {{ user.date_joined|date:'M d, Y' }}
+                  </p>
+
+                  <hr />
+                  <a href="{% url 'edit_profile' %}" class="btn btn-outline-dark">Edit Profile</a>
+                  <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

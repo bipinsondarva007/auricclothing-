@@ -1,0 +1,465 @@
+/* ===================================
+AURIC CLOTHING – COMPLETE STYLE FILE
+Works for all pages
+=================================== */
+
+
+/* ===== GLOBAL ===== */
+
+body{
+margin:0;
+font-family: 'Segoe UI', Arial, sans-serif;
+background:#f5f5f5;
+color:#222;
+}
+
+h1,h2,h3,h4,h5{
+font-weight:600;
+}
+
+
+/* ===== NAVBAR ===== */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 40px;
+background:black;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+.logo{
+color:#d4af37;
+font-size:26px;
+font-weight:bold;
+letter-spacing:2px;
+}
+
+.nav-links{
+list-style:none;
+display:flex;
+gap:25px;
+align-items:center;
+margin:0;
+}
+
+.nav-links a{
+color:white;
+text-decoration:none;
+font-weight:500;
+position:relative;
+}
+
+.nav-links a:hover{
+color:#d4af37;
+}
+
+
+/* ===== CAROUSEL ===== */
+
+.carousel-item img{
+height:600px;
+object-fit:cover;
+}
+
+
+/* ===== SECTION TITLE ===== */
+
+.section-title{
+text-align:center;
+margin:60px 0 30px;
+font-size:32px;
+font-weight:700;
+position:relative;
+}
+
+.section-title::after{
+content:"";
+width:80px;
+height:3px;
+background:#d4af37;
+display:block;
+margin:10px auto;
+}
+
+
+/* ===== PRODUCT GRID ===== */
+
+.product-container{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+padding:40px 8%;
+}
+
+
+/* ===== PRODUCT CARD ===== */
+
+.product-card{
+background:white;
+border-radius:10px;
+overflow:hidden;
+transition:0.3s;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.product-card:hover{
+transform:translateY(-8px);
+box-shadow:0 15px 35px rgba(0,0,0,0.15);
+}
+
+.product-img{
+height:300px;
+overflow:hidden;
+}
+
+.product-img img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:0.4s;
+}
+
+.product-card:hover img{
+transform:scale(1.05);
+}
+
+.product-info{
+padding:15px;
+text-align:center;
+}
+
+.product-info h3{
+font-size:18px;
+margin-bottom:5px;
+}
+
+.product-info p{
+font-size:18px;
+font-weight:bold;
+color:#333;
+}
+
+
+/* HOME PAGE PRODUCT GRID */
+
+.product-container{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+padding:40px 8%;
+}
+
+/* PRODUCT CARD */
+
+.product-card{
+background:white;
+border-radius:10px;
+overflow:hidden;
+transition:0.3s;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* PRODUCT IMAGE SIZE */
+
+.product-img{
+height:220px;
+overflow:hidden;
+}
+
+.product-img img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+
+.product-card-link{
+text-decoration:none;
+color:inherit;
+display:block;
+}
+
+@media(max-width:768px){
+
+.product-container{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+
+/* ===== SHOP PROMO IMAGE ===== */
+
+.promo-image{
+width:100%;
+height:500px;
+object-fit:cover;
+}
+
+
+/* ===== BUTTONS ===== */
+
+.btn-dark{
+background:black;
+border:none;
+}
+
+.btn-dark:hover{
+background:#d4af37;
+color:black;
+}
+
+.btn-gold{
+background:#d4af37;
+color:black;
+border:none;
+}
+
+.btn-gold:hover{
+background:#b8960c;
+color:black;
+}
+
+.btn-outline-dark:hover{
+background:black;
+color:white;
+}
+
+
+/* ===== ABOUT SECTION ===== */
+
+.about-section{
+padding:100px 0;
+background:#fafafa;
+}
+
+.about-title{
+font-size:36px;
+margin-bottom:20px;
+}
+
+.about-text{
+color:#555;
+line-height:1.7;
+margin-bottom:15px;
+}
+
+.about-btn{
+display:inline-block;
+margin-top:10px;
+padding:12px 30px;
+background:black;
+color:white;
+text-decoration:none;
+}
+
+.about-btn:hover{
+background:#d4af37;
+color:black;
+}
+
+
+/* ===== PRODUCT DETAIL PAGE ===== */
+
+.size-btn{
+min-width:60px;
+}
+
+.size-btn.btn-dark{
+background:black;
+color:white;
+}
+
+
+/* ===== PROFILE PAGE ===== */
+
+.profile-box{
+background:white;
+padding:40px;
+border-radius:10px;
+}
+
+.profile-avatar{
+font-size:70px;
+}
+
+
+/* ===== FOOTER ===== */
+
+.auric-footer{
+background:#0d0d0d;
+color:white;
+padding:70px 10%;
+margin-top:60px;
+}
+
+.footer-container{
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:40px;
+}
+
+.footer-box{
+flex:1;
+min-width:220px;
+}
+
+.footer-logo{
+font-size:28px;
+font-weight:700;
+letter-spacing:3px;
+color:#d4af37;
+margin-bottom:15px;
+}
+
+.footer-box h4{
+margin-bottom:15px;
+}
+
+.footer-box ul{
+list-style:none;
+padding:0;
+}
+
+.footer-box ul li{
+margin-bottom:8px;
+}
+
+.footer-box ul li a{
+text-decoration:none;
+color:#bbb;
+}
+
+.footer-box ul li a:hover{
+color:#d4af37;
+}
+
+.footer-box input{
+padding:8px;
+border:none;
+width:70%;
+}
+
+.footer-box button{
+padding:8px 15px;
+border:none;
+background:#d4af37;
+cursor:pointer;
+}
+
+.footer-bottom{
+margin-top:40px;
+border-top:1px solid #333;
+padding-top:20px;
+text-align:center;
+color:#aaa;
+}
+
+
+/* ===== CART PAGE ===== */
+
+.table{
+background:white;
+}
+
+
+/* ===== MOBILE RESPONSIVE ===== */
+
+@media(max-width:768px){
+
+.navbar{
+flex-direction:column;
+gap:10px;
+}
+
+.nav-links{
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.carousel-item img{
+height:300px;
+}
+
+.product-img{
+height:220px;
+}
+
+.promo-image{
+height:250px;
+}
+
+.footer-container{
+flex-direction:column;
+text-align:center;
+}
+
+}
+
+
+
+.view-all-btn{
+padding:12px 30px;
+font-size:16px;
+border-radius:30px;
+transition:0.3s;
+}
+
+.view-all-btn:hover{
+background:#d4af37;
+color:black;
+}
+
+
+
+.hero-caption{
+bottom:40%;
+}
+
+.hero-caption h1{
+font-size:48px;
+font-weight:700;
+}
+
+.hero-btn{
+background:#d4af37;
+border:none;
+padding:12px 25px;
+font-weight:600;
+}
+
+.product-container{
+max-width:1100px;
+margin:auto;
+}
+
+.product-card{
+transition:0.3s;
+}
+
+.product-card:hover{
+transform:translateY(-8px);
+box-shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+
+.section-title{
+margin-top:70px;
+margin-bottom:30px;
+}
+
+.view-all-btn{
+padding:14px 35px;
+border-radius:30px;
+font-weight:600;
+transition:0.3s;
+}
+
+.view-all-btn:hover{
+background:#d4af37;
+color:black;
+}

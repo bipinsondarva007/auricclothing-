@@ -1,0 +1,46 @@
+{% extends 'auric1/base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Checkout – Step 1 of 2</h2>
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card p-4 shadow-sm">
+                <h4>Shipping Address</h4>
+                <form method="post" action="{% url 'save_address' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label>Full Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Delivery Address</label>
+                        <textarea name="address" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-dark">Continue to Payment</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card p-4 shadow-sm">
+                <h4>Order Summary</h4>
+                {% for item in cart %}
+                <div class="d-flex justify-content-between">
+                    <span>{{ item.name }} x{{ item.quantity }}</span>
+                    <span>₹{% widthratio item.price 1 item.quantity %}</span>
+                </div>
+                {% endfor %}
+                <hr>
+                <h5>Total: ₹{{ total }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

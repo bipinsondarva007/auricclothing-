@@ -1,0 +1,24 @@
+{% extends 'auric1/base.html' %}
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="card shadow-sm p-5">
+        <div class="mb-4">
+            <span class="display-1 text-success">✓</span>
+        </div>
+        <h2 class="mb-3">Thank You for Your Order!</h2>
+        <p class="lead">Order #{{ order.id }} has been placed successfully.</p>
+        <div class="alert alert-info">
+            {% if order.payment_method == 'cod' %}
+                <p class="mb-0">You selected <strong>Cash on Delivery</strong>. Please pay ₹{{ order.total_amount }} when you receive your order.</p>
+            {% else %}
+                <p class="mb-0">Your payment of <strong>₹{{ order.total_amount }}</strong> has been processed successfully.</p>
+            {% endif %}
+            <p class="mb-0 mt-2"><strong>Estimated Delivery:</strong> {{ order.estimated_delivery_date|date:"M d, Y" }}</p>
+        </div>
+        <div class="mt-4">
+            <p>A confirmation email has been sent to {{ order.customer_email }}.</p>
+            <a href="{% url 'shop' %}" class="btn btn-dark">Continue Shopping</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'auric1/base.html' %}
+{% load static %}
+{% block content %}
+  <!-- Bootstrap Carousel -->
+  <div id="auricCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#auricCarousel" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#auricCarousel" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#auricCarousel" data-bs-slide-to="2"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1920&auto=format&fit=crop" class="d-block w-100" alt="Slide 1" />
+        <div class="carousel-caption hero-caption">
+          <h1>Elevate Your Style</h1>
+          <p>Premium Fashion for Modern Lifestyle</p>
+          <a href="{% url 'shop' %}" class="btn hero-btn">Shop Now</a>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1920&auto=format&fit=crop" class="d-block w-100" alt="Slide 2" />
+      </div>
+      <div class="carousel-item">
+        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1920&auto=format&fit=crop" class="d-block w-100" alt="Slide 3" />
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#auricCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#auricCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <!-- Products Section -->
+  <!-- Products Section -->
+  <h2 class="section-title">New Arrivals</h2>
+
+  <div class="container py-4">
+    <div class="row g-4">
+      {% for product in products %}
+        <div class="col-md-6 col-lg-3">
+          <a href="{% url 'product_detail' product.id %}" class="text-decoration-none text-dark">
+            <div class="card product-card h-100 border-0">
+              <div class="product-img">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" />
+              </div>
+
+              <div class="card-body text-center">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text fw-bold">₹{{ product.price }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% empty %}
+        <p class="text-center">No products available.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{% url 'shop' %}" class="btn btn-dark view-all-btn">View All Products</a>
+  </div>
+
+  <!-- About Section -->
+  <!-- ABOUT SECTION -->
+  <section class="about-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 text-center">
+          <h2 class="about-title">Crafting Timeless Elegance</h2>
+          <p class="about-text">At AURIC, fashion is more than clothing — it is identity. We design premium pieces that blend sophistication, comfort, and confidence into everyday wear.</p>
+          <p class="about-text">Our vision is to redefine modern fashion through minimal design, luxury quality, and timeless appeal. Every collection is crafted with precision and passion.</p>
+          <a href="{% url 'shop' %}" class="about-btn">Discover Our Collection</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% include 'auric1/footer.html' %}
+{% endblock %}

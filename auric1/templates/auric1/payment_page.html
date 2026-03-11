@@ -1,0 +1,44 @@
+{% extends 'auric1/base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Checkout – Step 2 of 2</h2>
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card p-4 shadow-sm">
+                <h4>Payment Method</h4>
+                <form method="post" action="{% url 'place_order' %}">
+                    {% csrf_token %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment_method" value="cod" id="cod" checked>
+                        <label class="form-check-label" for="cod">Cash on Delivery</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment_method" value="online" id="online">
+                        <label class="form-check-label" for="online">Pay Online (Demo)</label>
+                    </div>
+                    <button type="submit" class="btn btn-dark mt-3">Place Order</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card p-4 shadow-sm">
+                <h4>Delivery Address</h4>
+                <p><strong>{{ address.name }}</strong><br>
+                {{ address.phone }}<br>
+                {{ address.email }}<br>
+                {{ address.address }}</p>
+                <hr>
+                <h4>Order Summary</h4>
+                {% for item in cart %}
+                <div class="d-flex justify-content-between">
+                    <span>{{ item.name }} x{{ item.quantity }}</span>
+                    <span>₹{% widthratio item.price 1 item.quantity %}</span>
+                </div>
+                {% endfor %}
+                <hr>
+                <h5>Total: ₹{{ total }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

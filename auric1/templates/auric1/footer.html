@@ -1,0 +1,56 @@
+<!-- ================= FOOTER ================= -->
+
+<footer class="auric-footer">
+
+<div class="footer-container">
+
+    <!-- Brand -->
+    <div class="footer-box">
+        <h2 class="footer-logo">AURIC</h2>
+        <p>
+            Elevating everyday fashion with premium quality,
+            modern design, and timeless elegance.
+        </p>
+    </div>
+
+    <!-- Shop Links -->
+    <div class="footer-box">
+        <h4>Shop</h4>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'shop' %}">Shop</a></li>
+            <li><a href="{% url 'shop' %}?category=men">Men</a></li>
+            <li><a href="{% url 'shop' %}?category=women">Women</a></li>
+        </ul>
+    </div>
+
+    <!-- Support -->
+    <div class="footer-box">
+        <h4>Support</h4>
+        <ul>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms & Conditions</a></li>
+        </ul>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="footer-box">
+        <h4>Subscribe</h4>
+        <p>Get updates on new collections & offers.</p>
+
+        <form method="post" action="{% url 'shop' %}">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="Enter your email" required>
+            <button type="submit">Join</button>
+        </form>
+    </div>
+
+</div>
+
+<div class="footer-bottom">
+    © 2026 AURIC | Designed with passion.
+</div>
+
+</footer>

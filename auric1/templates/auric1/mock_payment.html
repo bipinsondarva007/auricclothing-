@@ -1,0 +1,15 @@
+{% extends 'auric1/base.html' %}
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="card shadow-sm p-5">
+        <h2 class="mb-4">Mock Payment Page</h2>
+        <p class="lead">Order #{{ order.id }} – Total: ₹{{ order.total_amount }}</p>
+        <p>This is a simulated payment for demonstration purposes.</p>
+        <p>In a real project, you would integrate a gateway like Stripe or Razorpay here.</p>
+        <div class="mt-4">
+            <a href="{% url 'payment_success' %}" class="btn btn-success btn-lg">Simulate Successful Payment</a>
+            <a href="{% url 'payment_cancel' %}" class="btn btn-outline-danger btn-lg">Cancel Payment</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
