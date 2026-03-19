@@ -137,8 +137,12 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = 'bipinsondarva185@gmail.com'   # તમારી Gmail ID
+EMAIL_HOST_USER = 'bipinsondarva185@gmail.com'   
 EMAIL_HOST_PASSWORD = 'rdfpdvgorojpzdkp'
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

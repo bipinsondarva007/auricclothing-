@@ -1,97 +1,111 @@
 {% extends 'auric1/base.html' %}
 {% load static %}
 {% block content %}
-  <div class="container py-5">
+<div class="container py-5">
     <div class="row">
-      <!-- Product Image -->
-      <div class="col-md-6">
-        <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}" />
-      </div>
-
-      <!-- Product Info -->
-      <div class="col-md-6">
-        <h2>{{ product.name }}</h2>
-        <p class="lead">₹{{ product.price }}</p>
-
-        <!-- Size Selection -->
-        {% if product.sizes.exists %}
-          <div class="mb-4">
-            <h5>SIZES</h5>
-            <div class="d-flex flex-wrap gap-2">
-              {% for size in product.sizes.all %}
-                <button type="button" class="btn btn-outline-dark size-btn" data-size="{{ size.name }}">{{ size.name }}</button>
-              {% endfor %}
-            </div>
-            <!-- Hidden input to store selected size -->
-            <input type="hidden" name="selected_size" id="selected_size" value="" />
-          </div>
-        {% endif %}
-
-        <!-- Add to Bag Form -->
-        <form method="post" action="{% url 'add_to_cart' product.id %}" class="mb-2">
-          {% csrf_token %}
-          <input type="hidden" name="size" class="add-to-cart-size" value="" />
-          <input type="hidden" name="quantity" value="1" />
-          <button type="submit" class="btn btn-dark btn-lg w-100">ADD TO BAG</button>
-        </form>
-
-        <!-- Buy Now Form -->
-        <form method="post" action="{% url 'buy_now' product.id %}">
-          {% csrf_token %}
-          <input type="hidden" name="size" class="buy-now-size" value="" />
-          <input type="hidden" name="quantity" value="1" />
-          <button type="submit" class="btn btn-gold btn-lg w-100">BUY NOW</button>
-        </form>
-
-        <!-- Additional Info Sections (static for now) -->
-        <div class="mt-5">
-          <div class="accordion" id="productAccordion">
-            <div class="accordion-item">
-              <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#details">DETAILS</button></h2>
-              <div id="details" class="accordion-collapse collapse show" data-bs-parent="#productAccordion">
-                <div class="accordion-body">{{ product.description|linebreaks }}</div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#delivery">DELIVERY</button></h2>
-              <div id="delivery" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
-                <div class="accordion-body">Standard delivery within 5-7 business days. Free shipping on orders above ₹999.</div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#returns">RETURNS</button></h2>
-              <div id="returns" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
-                <div class="accordion-body">Easy returns within 15 days of delivery. Items must be unworn with tags attached.</div>
-              </div>
-            </div>
-          </div>
+        <!-- Product Image -->
+        <div class="col-md-6">
+            <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
         </div>
 
-        <!-- ASK SID and Suggestions (static) -->
-        <div class="mt-4 p-3 bg-light rounded">
-          <h5>ASK SID <span class="badge bg-dark">Your personal style assistant</span></h5>
-          <ul class="list-unstyled">
-            <li>
-              <i class="bi bi-arrow-right"></i> More about this product
-            </li>
-            <li>
-              <i class="bi bi-arrow-right"></i> More about this material
-            </li>
-            <li>
-              <i class="bi bi-arrow-right"></i> Suggest more options in same length
-            </li>
-            <li>
-              <i class="bi bi-arrow-right"></i> What goes with this?
-            </li>
-          </ul>
+        <!-- Product Info -->
+        <div class="col-md-6">
+            <h2>{{ product.name }}</h2>
+            <p class="lead">₹{{ product.price }}</p>
+
+            <!-- Size Selection -->
+            {% if product.sizes.exists %}
+            <div class="mb-4">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <h5 class="mb-0">SIZES</h5>
+                    <a href="#" class="text-decoration-none small" data-bs-toggle="modal" data-bs-target="#sizeChartModal">SIZE CHART</a>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    {% for size in product.sizes.all %}
+                    <button type="button" class="btn btn-outline-dark size-btn" data-size="{{ size.name }}">{{ size.name }}</button>
+                    {% endfor %}
+                </div>
+                <!-- Hidden input to store selected size -->
+                <input type="hidden" id="selected_size" value="">
+            </div>
+            {% endif %}
+
+            <!-- Delivery Message -->
+            <p class="text-success small mb-4">
+                <i class="bi bi-truck"></i> FREE 1-2 day delivery on 5k+ pincodes
+            </p>
+
+            <!-- Add to Bag Form -->
+            <form method="post" action="{% url 'add_to_cart' product.id %}" class="mb-2" id="add-to-cart-form">
+                {% csrf_token %}
+                <input type="hidden" name="size" id="add-to-cart-size" value="">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn btn-dark btn-lg w-100">ADD TO BAG</button>
+            </form>
+
+            <!-- Buy Now Form -->
+            <form method="post" action="{% url 'buy_now' product.id %}" id="buy-now-form">
+                {% csrf_token %}
+                <input type="hidden" name="size" id="buy-now-size" value="">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn btn-gold btn-lg w-100">BUY NOW</button>
+            </form>
+
+            <!-- Additional Info Sections -->
+            <div class="mt-5">
+                <div class="accordion" id="productAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#details">DETAILS</button></h2>
+                        <div id="details" class="accordion-collapse collapse show" data-bs-parent="#productAccordion">
+                            <div class="accordion-body">{{ product.description|linebreaks }}</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#delivery">DELIVERY</button></h2>
+                        <div id="delivery" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                            <div class="accordion-body">Standard delivery within 5-7 business days. Free shipping on orders above ₹999.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#returns">RETURNS</button></h2>
+                        <div id="returns" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                            <div class="accordion-body">Easy returns within 15 days of delivery. Items must be unworn with tags attached.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ASK SID and Suggestions (static) -->
+            <div class="mt-4 p-3 bg-light rounded">
+                <h5>ASK SID <span class="badge bg-dark">Your personal style assistant</span></h5>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-arrow-right"></i> More about this product</li>
+                    <li><i class="bi bi-arrow-right"></i> More about this material</li>
+                    <li><i class="bi bi-arrow-right"></i> Suggest more options in same length</li>
+                    <li><i class="bi bi-arrow-right"></i> What goes with this?</li>
+                </ul>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  <!-- JavaScript to handle size selection -->
+<!-- Size Chart Modal (optional) -->
+<div class="modal fade" id="sizeChartModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Size Chart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Add your size chart information here.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-  <script>
+<!-- JavaScript to handle size selection -->
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const sizeButtons = document.querySelectorAll('.size-btn');
         const addToCartSize = document.getElementById('add-to-cart-size');
@@ -120,7 +134,7 @@
             if (form) {
                 form.addEventListener('submit', function(e) {
                     var sizeInput = form.querySelector('input[name="size"]');
-                    var hasSizes = {{ product.sizes.exists|lower }};
+                    var hasSizes = {{ product.sizes.exists|yesno:"true,false" }};  // boolean literal
                     if (hasSizes && (!sizeInput || !sizeInput.value)) {
                         e.preventDefault();
                         alert('Please select a size.');

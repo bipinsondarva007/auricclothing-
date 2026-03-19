@@ -1,13 +1,13 @@
-from django.urls import path
+from django.urls import path,include
 from . import views
 
 urlpatterns = [
-    # Login page is the root
-    path('', views.user_login, name='login'),
+   
+  
 
     # Home (after login)
-    path('home/', views.home, name='home'),
-
+    path('', views.home, name='home'),
+    
     # Shop and products
     path('shop/', views.shop, name='shop'),
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),

@@ -1,20 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth import login, logout, authenticate
-
-from .models import Product, Order, OrderItem
 from django.core.mail import send_mail
 from django.conf import settings
-from datetime import timedelta
 from django.utils import timezone
+from datetime import timedelta
 
+from .models import Product, Order, OrderItem
+from .forms import CustomUserCreationForm
 
-from .forms import CustomUserCreationForm 
-from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.decorators import login_required
-
+# ================== PUBLIC VIEWS ==================
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -38,7 +35,6 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                # Redirect to 'next' if provided, otherwise go to home
                 next_page = request.GET.get('next') or request.POST.get('next') or 'home'
                 return redirect(next_page)
         messages.error(request, "Invalid username or password.")
@@ -49,12 +45,12 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     messages.info(request, "You have been logged out.")
-    return redirect('login')  # go back to login page
+    return redirect('login')
 
 # ================== PROTECTED VIEWS ==================
-@login_required
+
 def home(request):
-    products = Product.objects.all()[:6]
+    products = Product.objects.all()[:8]
     return render(request, 'auric1/home.html', {'products': products})
 
 @login_required
@@ -75,11 +71,8 @@ def product_detail(request, product_id):
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     quantity = int(request.POST.get('quantity', 1))
-    size = request.POST.get('size')               # get selected size
-
+    size = request.POST.get('size')
     cart = request.session.get('cart', [])
-
-    # Check if same product AND same size already in cart
     found = False
     for item in cart:
         if item['product_id'] == product_id and item.get('size') == size:
@@ -92,9 +85,8 @@ def add_to_cart(request, product_id):
             'name': product.name,
             'price': str(product.price),
             'quantity': quantity,
-            'size': size,                          # store size
+            'size': size,
         })
-
     request.session['cart'] = cart
     messages.success(request, f'{product.name} ({size}) added to cart.')
     return redirect('cart_view')
@@ -103,10 +95,8 @@ def add_to_cart(request, product_id):
 def buy_now(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     quantity = int(request.POST.get('quantity', 1))
-    size = request.POST.get('size')                # get selected size from POST
+    size = request.POST.get('size')
     cart = request.session.get('cart', [])
-
-    # Check if same product AND same size already in cart
     found = False
     for item in cart:
         if item['product_id'] == product_id and item.get('size') == size:
@@ -132,7 +122,7 @@ def cart_view(request):
 
 @login_required
 def remove_from_cart(request, product_id):
-    size = request.GET.get('size')   # get size from query string
+    size = request.GET.get('size')
     cart = request.session.get('cart', [])
     cart = [item for item in cart if not (item['product_id'] == product_id and item.get('size') == size)]
     request.session['cart'] = cart
@@ -140,7 +130,6 @@ def remove_from_cart(request, product_id):
     return redirect('cart_view')
 
 @login_required
-
 def checkout(request):
     cart = request.session.get('cart', [])
     if not cart:
@@ -156,10 +145,7 @@ def place_order(request):
         if not cart or not address:
             return redirect('checkout')
         total = sum(float(item['price']) * item['quantity'] for item in cart)
-
-        # Calculate estimated delivery date (e.g., 7 days from now)
         est_delivery = timezone.now().date() + timedelta(days=7)
-
         order = Order.objects.create(
             user=request.user,
             customer_name=address['name'],
@@ -172,7 +158,6 @@ def place_order(request):
             order_status='pending',
             estimated_delivery_date=est_delivery,
         )
-
         for item in cart:
             OrderItem.objects.create(
                 order=order,
@@ -180,26 +165,18 @@ def place_order(request):
                 quantity=item['quantity'],
                 size=item.get('size', ''),
             )
-
-        # Clear cart and address from session
         request.session['cart'] = []
         if 'address' in request.session:
             del request.session['address']
-
-        # Send order confirmation email (to console for now)
         subject = f"Order Confirmation #{order.id}"
         message = f"""
         Dear {order.customer_name},
-
         Thank you for your order! Your order #{order.id} has been placed successfully.
-
         Order Details:
         Total Amount: ₹{order.total_amount}
         Payment Method: {order.get_payment_method_display()}
         Estimated Delivery: {order.estimated_delivery_date}
-
         We will notify you once your order ships.
-
         Thanks for shopping with AURIC!
         """
         send_mail(
@@ -209,14 +186,12 @@ def place_order(request):
             [order.customer_email],
             fail_silently=False,
         )
-
         if request.POST.get('payment_method') == 'online':
             request.session['pending_order_id'] = order.id
             return redirect('mock_payment')
         else:
             messages.success(request, 'Order placed successfully! You will pay on delivery.')
             return redirect('order_confirmation', order_id=order.id)
-
     return redirect('checkout')
 
 @login_required
@@ -268,16 +243,14 @@ def order_confirmation(request, order_id):
 
 @login_required
 def profile(request):
-    # Get all orders for the current user
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'auric1/profile.html', {'orders': orders})
-
 
 @login_required
 def update_cart_item(request, product_id):
     if request.method == 'POST':
         action = request.POST.get('action')
-        size = request.POST.get('size')   # get size from POST
+        size = request.POST.get('size')
         cart = request.session.get('cart', [])
         for item in cart:
             if item['product_id'] == product_id and item.get('size') == size:
@@ -288,7 +261,6 @@ def update_cart_item(request, product_id):
                 break
         request.session['cart'] = cart
     return redirect('cart_view')
-
 
 @login_required
 def save_address(request):
@@ -302,7 +274,6 @@ def save_address(request):
         return redirect('payment_page')
     return redirect('checkout')
 
-
 @login_required
 def payment_page(request):
     cart = request.session.get('cart', [])
@@ -315,10 +286,6 @@ def payment_page(request):
         'total': total,
         'address': address,
     })
-    
-    
-from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def edit_profile(request):
